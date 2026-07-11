@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  HEAD
+  DEVELOPER
+  CLIENT
+}
+
+enum Category {
+  WEB
+  APP
+  AI
+  CYBER_SECURITY
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  password      String?
+  image         String?
+  role          Role     @default(DEVELOPER)
+  category      Category?
+  onlineStatus  Boolean  @default(false)
+  lastSeen      DateTime @default(now())
+  points        Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  assignedTasks  Task[]        @relation("AssignedTasks")
+  receivedTasks  Task[]        @relation("ReceivedTasks")
+  subtasks       SubTask[]
+  sentMessages   ChatMessage[] @relation("SentMessages")
+  receivedMsgs   ChatMessage[] @relation("ReceivedMessages")
+  announcements  Announcement[]
+  clientProjects ClientProject[]
+}
+
+model Task {
+  id            String     @id @default(cuid())
+  title         String
+  description   String
+  status        TaskStatus @default(PENDING)
+  priority      String     @default("medium")
+  points        Int        @default(0)
+  category      Category
+  assignedById  String
+  assignedToId  String
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  assignedBy User  @relation("AssignedTasks", fields: [assignedById], references: [id])
+  assignedTo User  @relation("ReceivedTasks", fields: [assignedToId], references: [id])
+  subtasks    SubTask[]
+  clientProjs ClientProject[]
+}
+
+model SubTask {
+  id          String     @id @default(cuid())
+  taskId      String
+  developerId String
+  headId      String
+  progress    Int        @default(0)
+  status      TaskStatus @default(PENDING)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  task      Task  @relation(fields: [taskId], references: [id])
+  developer User  @relation(fields: [developerId], references: [id])
+}
+
+model Announcement {
+  id          String   @id @default(cuid())
+  title       String
+  message     String
+  rewardPoints Int     @default(0)
+  userId      String
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  senderId  String
+  receiverId String?
+  groupId   String?
+  taskId    String?
+  message   String
+  seen      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  sender   User  @relation("SentMessages", fields: [senderId], references: [id])
+  receiver User? @relation("ReceivedMessages", fields: [receiverId], references: [id])
+}
+
+model ClientProject {
+  id            String     @id @default(cuid())
+  clientId      String
+  taskId        String
+  companyName   String
+  companyDetails String?
+  status        TaskStatus @default(PENDING)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  client User @relation(fields: [clientId], references: [id])
+  task   Task @relation(fields: [taskId], references: [id])
+}
