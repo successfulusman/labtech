@@ -33,6 +33,12 @@ export function Navbar() {
             <Link href="#developers" className={`${scrolled ? "text-gray-600 hover:text-primary" : "text-white/80 hover:text-white"} transition-colors`}>Developers</Link>
             <Link href="#contact" className={`${scrolled ? "text-gray-600 hover:text-primary" : "text-white/80 hover:text-white"} transition-colors`}>Contact</Link>
             <Link
+              href="/signup"
+              className={`${scrolled ? "border-primary text-primary" : "border-white text-white"} border-2 px-6 py-2 rounded-full hover:bg-secondary hover:text-white hover:border-secondary transition-colors`}
+            >
+              Sign Up
+            </Link>
+            <Link
               href="/login"
               className={`${scrolled ? "bg-primary" : "bg-secondary"} text-white px-6 py-2 rounded-full hover:bg-primary-light transition-colors`}
             >
