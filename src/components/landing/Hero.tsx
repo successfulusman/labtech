@@ -5,14 +5,14 @@ import Link from "next/link";
 
 export function Hero() {
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-[#3b82f6] via-[#5aa0f7] to-[#2563eb]">
+    <section className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-primary via-primary-light to-dark">
       <div className="absolute inset-0">
         <img
           src="/images/web.jpg"
           alt="LabTech work"
-          className="w-full h-full object-cover opacity-10"
+          className="w-full h-full object-cover opacity-15"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#2563eb]/50 via-[#3b82f6]/60 to-[#1d4ed8]/70" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/60 via-primary-light/70 to-dark/60" />
       </div>
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-10 w-72 h-72 bg-secondary rounded-full blur-3xl animate-pulse" />
@@ -30,7 +30,7 @@ export function Hero() {
             <span className="text-secondary">LabTech</span>
           </motion.h1>
             <motion.p
-              className="text-lg text-white/90 mb-8 leading-relaxed max-w-2xl mx-auto"
+              className="text-lg text-gray-300 mb-8 leading-relaxed max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
