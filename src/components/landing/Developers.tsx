@@ -3,12 +3,12 @@
 import { motion } from "framer-motion";
 
 const developers = [
-  { name: "Saad Ali", role: "Super Admin", category: "Full Stack", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=saad" },
-  { name: "Ahmed Khan", role: "Web Head", category: "Web", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=ahmed" },
-  { name: "Sara Ahmed", role: "App Head", category: "App", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=sara" },
-  { name: "Usman Malik", role: "AI Head", category: "AI", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=usman" },
-  { name: "Fatima Zia", role: "Cyber Head", category: "Cyber Security", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=fatima" },
-  { name: "Ali Raza", role: "Developer", category: "Web", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=ali" },
+  { name: "Saad Ali", role: "Super Admin", category: "Full Stack", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=saad&mouth=smile" },
+  { name: "Ahmed Khan", role: "Web Head", category: "Web", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=ahmed&mouth=smile" },
+  { name: "Sara Ahmed", role: "App Head", category: "App", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=sara&mouth=smile" },
+  { name: "Usman Malik", role: "AI Head", category: "AI", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=usman&mouth=smile" },
+  { name: "Fatima Zia", role: "Cyber Head", category: "Cyber Security", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=fatima&mouth=smile" },
+  { name: "Ali Raza", role: "Developer", category: "Web", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=ali&mouth=smile" },
 ];
 
 export function Developers() {
