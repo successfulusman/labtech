@@ -18,7 +18,7 @@ export async function GET() {
   } else if (userRole === "DEVELOPER") {
     contacts = await prisma.user.findMany({ where: { role: { in: ["HEAD", "ADMIN"] } }, select: userSelect });
   } else {
-    contacts = await prisma.user.findMany({ where: { role: "ADMIN" }, select: userSelect });
+    contacts = await prisma.user.findMany({ where: { role: { in: ["ADMIN", "HEAD"] } }, select: userSelect });
   }
 
   return NextResponse.json({ contacts });

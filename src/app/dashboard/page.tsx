@@ -15,7 +15,12 @@ export default function DashboardPage() {
       return;
     }
     const role = (session.user as any)?.role;
-    const route = role ? `/dashboard/${String(role).toLowerCase()}` : "/login";
+    const route =
+      role === "CLIENT"
+        ? "/dashboard/chat"
+        : role
+          ? `/dashboard/${String(role).toLowerCase()}`
+          : "/login";
     router.push(route);
   }, [session, status, router]);
 
