@@ -69,6 +69,10 @@ export async function POST(req: Request) {
       const allDone = allSubtasks.every((s) => s.status === "APPROVED");
       if (allDone) {
         await prisma.task.update({ where: { id: subtask.taskId }, data: { status: "SUBMITTED" } });
+        await prisma.clientProject.updateMany({
+          where: { taskId: subtask.taskId },
+          data: { status: "SUBMITTED" },
+        });
       }
     }
 

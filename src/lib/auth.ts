@@ -46,11 +46,31 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
         token.role = (user as any).role;
         token.category = (user as any).category;
+        if (account?.provider !== "credentials" && (user as any).email) {
+          const dbUser = await prisma.user.findUnique({
+            where: { email: (user as any).email },
+            select: { id: true, role: true, category: true },
+          });
+          if (dbUser) {
+            token.id = dbUser.id;
+            token.role = dbUser.role;
+            token.category = dbUser.category || undefined;
+          }
+        }
+      } else if (token.id && !token.role) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { role: true, category: true },
+        });
+        if (dbUser) {
+          token.role = dbUser.role;
+          token.category = dbUser.category || undefined;
+        }
       }
       return token;
     },

@@ -15,7 +15,7 @@ export default function DashboardPage() {
       return;
     }
     const role = (session.user as any)?.role;
-    const route = `/dashboard/${role?.toLowerCase()}`;
+    const route = role ? `/dashboard/${String(role).toLowerCase()}` : "/login";
     router.push(route);
   }, [session, status, router]);
 

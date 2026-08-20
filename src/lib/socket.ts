@@ -10,6 +10,7 @@ export function useSocket() {
   const { data: session } = useSession();
   const [socket, setSocket] = useState<Socket | null>(globalSocket);
   const [connected, setConnected] = useState(false);
+  const [reconnecting, setReconnecting] = useState(false);
 
   useEffect(() => {
     if (!session?.user) return;
@@ -18,6 +19,11 @@ export function useSocket() {
       globalSocket = io({
         path: "/api/socket",
         transports: ["websocket", "polling"],
+        reconnection: true,
+        reconnectionAttempts: Infinity,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 8000,
+        timeout: 20000,
       } as any);
     }
 
@@ -25,10 +31,13 @@ export function useSocket() {
 
     globalSocket.on("connect", () => {
       setConnected(true);
+      setReconnecting(false);
       globalSocket?.emit("user:online", { userId: (session.user as any).id });
     });
 
     globalSocket.on("disconnect", () => setConnected(false));
+    globalSocket.on("reconnect_attempt", () => setReconnecting(true));
+    globalSocket.on("reconnect", () => setReconnecting(false));
 
     return () => {
       if (globalSocket) {
@@ -37,5 +46,5 @@ export function useSocket() {
     };
   }, [session]);
 
-  return { socket, connected };
+  return { socket, connected, reconnecting };
 }

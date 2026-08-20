@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useSocket } from "@/lib/socket";
+import { fetchJson } from "@/lib/fetchClient";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import { FiSend } from "react-icons/fi";
@@ -19,7 +20,7 @@ interface Message {
 
 export function ChatWindow({ receiverId, groupId }: { receiverId?: string; groupId?: string }) {
   const { data: session } = useSession();
-  const { socket, connected } = useSocket();
+  const { socket, connected, reconnecting } = useSocket();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [contacts, setContacts] = useState<any[]>([]);
@@ -59,18 +60,24 @@ export function ChatWindow({ receiverId, groupId }: { receiverId?: string; group
   }, [socket, userId, groupId]);
 
   const fetchMessages = async () => {
-    const params = new URLSearchParams();
-    if (selectedContact) params.set("userId", selectedContact);
-    if (groupId) params.set("groupId", groupId);
-    const res = await fetch(`/api/chat?${params}`);
-    const data = await res.json();
-    setMessages(data.messages || []);
+    try {
+      const params = new URLSearchParams();
+      if (selectedContact) params.set("userId", selectedContact);
+      if (groupId) params.set("groupId", groupId);
+      const data = await fetchJson(`/api/chat?${params}`);
+      setMessages(data.messages || []);
+    } catch {
+      setMessages([]);
+    }
   };
 
   const fetchContacts = async () => {
-    const res = await fetch("/api/chat/contacts");
-    const data = await res.json();
-    setContacts(data.contacts || []);
+    try {
+      const data = await fetchJson("/api/chat/contacts");
+      setContacts(data.contacts || []);
+    } catch {
+      setContacts([]);
+    }
   };
 
   useEffect(() => {
@@ -110,7 +117,13 @@ export function ChatWindow({ receiverId, groupId }: { receiverId?: string; group
       <div className="w-72 border-r border-gray-100 overflow-y-auto">
         <div className="p-4 border-b border-gray-100">
           <h3 className="font-semibold text-primary">Chats</h3>
-          {connected && <span className="text-xs text-green-500">● Connected</span>}
+          {connected ? (
+            <span className="text-xs text-green-500">● Connected</span>
+          ) : reconnecting ? (
+            <span className="text-xs text-amber-500">⟳ Reconnecting...</span>
+          ) : (
+            <span className="text-xs text-red-500">● Disconnected</span>
+          )}
         </div>
         {contacts.map(contact => (
           <div
