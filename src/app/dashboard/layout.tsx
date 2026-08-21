@@ -28,6 +28,7 @@ const navItems: Record<string, { label: string; href: string; icon: any }[]> = {
     { label: "Chat", href: "/dashboard/chat", icon: FiMessageSquare },
   ],
   CLIENT: [
+    { label: "Dashboard", href: "/dashboard/client", icon: FiHome },
     { label: "Chat with Team", href: "/dashboard/chat", icon: FiMessageSquare },
   ],
 };

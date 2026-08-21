@@ -17,7 +17,7 @@ export default function DashboardPage() {
     const role = (session.user as any)?.role;
     const route =
       role === "CLIENT"
-        ? "/dashboard/chat"
+        ? "/dashboard/client"
         : role
           ? `/dashboard/${String(role).toLowerCase()}`
           : "/login";
